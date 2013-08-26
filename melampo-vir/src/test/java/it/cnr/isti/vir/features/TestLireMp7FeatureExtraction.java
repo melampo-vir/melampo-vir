@@ -21,7 +21,7 @@ public class TestLireMp7FeatureExtraction {
 	public void testScalableColorFeatureExtractor()
 			throws Exception {
 		
-		String features = extractFeatures("net.semanticmetadata.lire.imageanalysis.ScalableColor", "/cluj_avram_iancu.jpg");
+		String features = extractFeatures("net.semanticmetadata.lire.imageanalysis.ScalableColor", "/images/cluj_avram_iancu.jpg");
 		assertNotNull(features);
 		assertEquals(features.length(), 167);
 		

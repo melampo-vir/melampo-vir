@@ -5,7 +5,8 @@
   <parent>
     <artifactId>melampo</artifactId>
     <groupId>it.cnr.isti.melampo</groupId>
-    <version>0.0.1.SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../../melampo-parent-pom/melampo-parent-pom/pom.xml</relativePath>
   </parent>
   <artifactId>melampo-vir</artifactId>
   <name>vir</name>
