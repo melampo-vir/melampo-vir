@@ -55,10 +55,19 @@ public class FeaturesCollectorsArchive implements Iterable<IFeaturesCollector> {
 	private final FeatureClassCollector featuresClasses;
 	private final Constructor fcClassConstructor;
 	private final Constructor fcClassConstructor_NIO;
-
+	
 	private final Class idClass;
 
 	private boolean changed = false;
+	private boolean forceOverwrite = false;
+
+	public boolean isForceOverwrite() {
+		return forceOverwrite;
+	}
+
+	public void setForceOverwrite(boolean overwrite) {
+		this.forceOverwrite = overwrite;
+	}
 
 	private final Class fcClass;
 
@@ -89,7 +98,10 @@ public class FeaturesCollectorsArchive implements Iterable<IFeaturesCollector> {
 	public FeaturesCollectorsArchive(File file,
 			FeatureClassCollector featuresClasses, Class idClass, Class fcClass)
 			throws Exception {
-		file.delete();
+		
+		if(isForceOverwrite())
+			file.delete();
+		
 		rndFile = new RandomAccessFile(file, "rw");
 		this.f = file;
 		this.featuresClasses = featuresClasses;
