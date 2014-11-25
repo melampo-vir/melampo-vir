@@ -24,6 +24,31 @@ public class Pivots {
 		return avg / (double) count;
 	}
 	
+	public static final double getTrMatrixAvg(double[][] intDist, int topK) {
+		
+		if(topK > intDist.length)
+			throw new ArrayIndexOutOfBoundsException(topK);
+		
+		double avg = 0;
+		// i=0 is not useful
+		
+		if ( intDist == null ) return -1;
+		int count = 0;
+		int lastJ = 0;
+		for ( int i=1; i< topK; i++ ) {
+			double temp = 0;
+			lastJ = Math.min(intDist[i].length, topK); 
+			
+			for ( int j=0; j<lastJ; j++ ) {
+				temp = intDist[i][j];
+				avg += temp;
+			}
+			count += lastJ;
+		}
+		return avg / (double) count;
+	}
+	
+	
 	public static final Collection<Integer> reordering(Integer triesMax, Integer nObjects, float[][] intDist ) {
 		return reordering( triesMax, nObjects, intDist, intDist.length);
 	}
@@ -114,7 +139,7 @@ public class Pivots {
 			}	
 			
 			
-			//System.out.println(orderedList.size() + ":\t" +best);
+			System.out.println(orderedList.size() + ":\t" +best);
 			//System.out.print(".");
 		}
 		
