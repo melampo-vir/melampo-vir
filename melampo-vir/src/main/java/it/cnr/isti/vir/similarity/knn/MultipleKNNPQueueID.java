@@ -98,6 +98,7 @@ public class MultipleKNNPQueueID<F>  {
 						true );
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public MultipleKNNPQueueID(	Collection queryColl,
 								Integer k,
 								Metric comp,
@@ -140,11 +141,13 @@ public class MultipleKNNPQueueID<F>  {
 			if ( !silent ) {
 				System.out.print(ordering.getClass());
 				System.out.println("Avg inter-dist before ordering: " + Pivots.getTrMatrixAvg(intDist));
+				System.out.println("Avg inter-dist before ordering (topK): " + Pivots.getTrMatrixAvg(intDist, k));
 				startTime = System.currentTimeMillis();
 			}
 			reorder( ordering.getOrder(intDist));
 			if ( !silent ) {
 				System.out.println("Avg inter-dist after ordering: " + Pivots.getTrMatrixAvg(intDist));	
+				System.out.println("Avg inter-dist before ordering (topK): " + Pivots.getTrMatrixAvg(intDist, k));
 				System.out.print(" done in " + (System.currentTimeMillis()-startTime) + " milliSec\n");
 			}
 		}
@@ -153,6 +156,7 @@ public class MultipleKNNPQueueID<F>  {
 				
 		knn = new KNNPQueue[qObj.length];
 		for ( int i=0; i<knn.length; i++ ) {
+			@SuppressWarnings("rawtypes")
 			SimilarityPQueue queue = null;
 			try {
 				// for SimPQueue_kNN
@@ -250,6 +254,7 @@ public class MultipleKNNPQueueID<F>  {
 		Reordering.reorder(ordList, qObj);
 		Reordering.reorder(ordList, knn);
 		intDist = Reordering.reorderTrMatrix(ordList, intDist);
+		//System.out.println("intDist");
 		
 	}
 	
@@ -261,6 +266,7 @@ public class MultipleKNNPQueueID<F>  {
 		return sum /(double) knn.length;
 	}
 	
+	//TODO: remove duplication to Pivots.getAvg..
 	public final double getAvgIntDist() {
 		double avg = 0;
 		// i=0 is not useful
@@ -277,6 +283,12 @@ public class MultipleKNNPQueueID<F>  {
 		}
 		return avg / (double) count;
 	}
+	
+	//TODO: remove duplication to Pivots.getAvg..
+		public final double getAvgIntDist(int topK) {
+			return Pivots.getTrMatrixAvg(intDist, topK);
+		}
+	
 	
 	private final boolean intDistFiltered(int id, double[] tempDs, int[] tempIDs, int set) {
 		

@@ -4,6 +4,7 @@ import it.cnr.isti.vir.util.Pivots;
 import it.cnr.isti.vir.util.RandomOperations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -25,8 +26,9 @@ public class QueriesOrder3 implements IQueriesOrdering{
 	
 	public final ArrayList<Integer> getOrder(double[][] intDist) {
 		
-		System.out.print(this.getClass() + " ordering (triesMax="+triesMax+" nObjects4Tries=" + nObjects +")");
+		System.out.println(this.getClass() + " ordering (triesMax="+triesMax+" nObjects4Tries=" + nObjects +")");
 		System.out.println("Avg inter-dist before ordering: " + Pivots.getTrMatrixAvg(intDist));
+		System.out.println("Avg inter-dist before ordering(topK): " + Pivots.getTrMatrixAvg(intDist, nObjects));
 		long startTime = System.currentTimeMillis();
 
 		
@@ -96,7 +98,9 @@ public class QueriesOrder3 implements IQueriesOrdering{
 				if ( currSum > bestSum ) {
 					best = curr;
 					bestSum = currSum;
-				}				
+				}
+				
+				System.out.println("QueriesOrder3 Try: " + triesCount + " Best Sum: " + bestSum);
 			} // next best found
 			
 			ordered[best]=true;
@@ -121,11 +125,13 @@ public class QueriesOrder3 implements IQueriesOrdering{
 			}	
 			
 			
-			//System.out.println(orderedList.size() + ":\t" +best);
+			System.out.println(orderedList.size() + ":\t" +best);
 			//System.out.print(".");
+			System.out.println(Arrays.toString(orderedList.toArray()));
 		}
 		
 		return orderedList;
+		
 	}
 	
 }
