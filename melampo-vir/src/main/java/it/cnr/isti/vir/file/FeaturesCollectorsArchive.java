@@ -113,8 +113,8 @@ public class FeaturesCollectorsArchive implements Iterable<IFeaturesCollector> {
 		this.ids = new ArrayList();
 		// this.idOffsetMap = new HashMap();
 		this.idPosMap = new HashMap();
-		offsetFile = new File(getIDFileName(file));
-		idFile = new File(getOffsetFileName(file));
+		offsetFile = new File(getOffsetFileName(file));
+		idFile = new File(getIDFileName(file));
 
 		writeIntro(rndFile, featuresClasses, idClass, fcClass);
 	}
