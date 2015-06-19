@@ -116,7 +116,9 @@ public class FeaturesCollectorsArchive implements Iterable<IFeaturesCollector> {
 		offsetFile = new File(getOffsetFileName(file));
 		idFile = new File(getIDFileName(file));
 
-		writeIntro(rndFile, featuresClasses, idClass, fcClass);
+		//TODO: think if a better condition can be used. The intro must be written only first time
+		if (!file.exists() || file.length() == 0)
+			writeIntro(rndFile, featuresClasses, idClass, fcClass);
 	}
 
 	public static final void writeIntro(DataOutput out,

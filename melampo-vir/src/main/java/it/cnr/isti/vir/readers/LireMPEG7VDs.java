@@ -3,6 +3,8 @@ package it.cnr.isti.vir.readers;
 import it.cnr.isti.vir.features.FeatureClassCollector;
 import it.cnr.isti.vir.features.FeaturesCollectorException;
 import it.cnr.isti.vir.features.FeaturesCollectorArr;
+import it.cnr.isti.vir.features.IFeature;
+import it.cnr.isti.vir.features.lire.vd.CcDominantColor;
 import it.cnr.isti.vir.features.lire.vd.LireBasicFeatures;
 import it.cnr.isti.vir.features.lire.vd.LireCEDD;
 import it.cnr.isti.vir.features.lire.vd.LireColorLayout;
@@ -26,6 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.reflect.Constructor;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
@@ -131,7 +134,25 @@ public class LireMPEG7VDs {
 	        		} 
 	        		else if (xmlr.getLocalName().equals("Tamura")  && toRead(LireTamura.class, fClasses) ) {
 	        			currFC.add( new LireTamura( xmlr ) );
-	        		} 	   
+	        		} 	
+	        		else if (xmlr.getLocalName().equals("CcDominantColor")){
+	        			//TODO: update the implementation of the other classes to parse the input correcty if the feature is to be ignored
+	        			IFeature dominantColor = new CcDominantColor( xmlr );
+	        			if(toRead(CcDominantColor.class, fClasses))
+	        				currFC.add(dominantColor);
+	        			
+//	        			Constructor<?> constructor;
+//	        			IFeature ccDominantColor;
+//						try {
+//							constructor = Class.forName("it.cnr.isti.vir.features.lire.vd.CcDominantColor").getConstructor(XMLStreamReader.class);
+//							ccDominantColor = (IFeature) constructor.newInstance(xmlr);
+//							currFC.add( ccDominantColor);
+//						} catch (Exception e) {
+//							//throw new RuntimeException("Cannot instantionate CcDominantColor for xml stream!", e);
+//							System.err.println("Cannot instantiate CcDominantColor for xml stream!");
+//							e.printStackTrace();
+//						}
+					} 	
 	        		break;
        			
 	            case XMLStreamConstants.END_ELEMENT:

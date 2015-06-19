@@ -1,5 +1,6 @@
 package it.cnr.isti.vir.features;
 
+import it.cnr.isti.vir.features.lire.vd.CcDominantColor;
 import it.cnr.isti.vir.features.lire.vd.LireCEDD;
 import it.cnr.isti.vir.features.lire.vd.LireColorLayout;
 import it.cnr.isti.vir.features.lire.vd.LireColorLayout2;
@@ -31,7 +32,8 @@ public class FeatureClasses {
 		LireScalableColor2.class,
 		LireEdgeHistogram2.class,
 		LireFCTH.class,
-		LireCEDD.class
+		LireCEDD.class,
+		CcDominantColor.class
 	};
 	
 	static final Hashtable<Class, Integer> featuresIDsHT = ClassIDs.getClassIDsHT(idsFeatures);

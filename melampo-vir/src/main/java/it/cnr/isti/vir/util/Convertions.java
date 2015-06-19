@@ -2,7 +2,7 @@ package it.cnr.isti.vir.util;
 
 public final class Convertions {
 	
-	protected static final String[] getNumbers(String str) {
+	public static final String[] getNumbers(String str) {
 		return str.split("\\s+");
 	}
 

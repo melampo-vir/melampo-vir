@@ -4,6 +4,7 @@ import it.cnr.isti.vir.features.FeatureClassCollector;
 import it.cnr.isti.vir.features.FeaturesCollectorException;
 import it.cnr.isti.vir.features.IFeature;
 import it.cnr.isti.vir.features.IFeaturesCollector;
+import it.cnr.isti.vir.features.lire.vd.CcDominantColor;
 import it.cnr.isti.vir.features.lire.vd.LireColorLayout;
 import it.cnr.isti.vir.features.lire.vd.LireEdgeHistogram;
 import it.cnr.isti.vir.features.lire.vd.LireScalableColor;
@@ -31,8 +32,11 @@ public class LireObject implements IFeaturesCollector, IHasID, Serializable {
 	private final LireColorLayout cl;
 	private final LireScalableColor sc;
 	private final LireEdgeHistogram eh;
+	private final CcDominantColor dc;
 	
-	private static final byte version = 0;
+	private byte version = 0;
+	private static final byte VERSION_NO_DC = 0;
+	private static final byte VERSION_WITH_DC = 1;
 	
 	private final IID id;
 	
@@ -46,7 +50,11 @@ public class LireObject implements IFeaturesCollector, IHasID, Serializable {
 		cl = (LireColorLayout) f.getFeature(LireColorLayout.class);
 		sc = (LireScalableColor) f.getFeature(LireScalableColor.class);
 		eh = (LireEdgeHistogram) f.getFeature(LireEdgeHistogram.class);
-//		System.out.println(cl.toString());
+		dc = (CcDominantColor) f.getFeature(CcDominantColor.class);
+		if(hasDominantColor())
+			this.version = VERSION_WITH_DC; 
+		
+		System.out.println(cl.toString());
 //		System.out.println(sc.toString());
 //		System.out.println(eh.toString());
 		if ( cl == null ||
@@ -54,6 +62,7 @@ public class LireObject implements IFeaturesCollector, IHasID, Serializable {
 			 eh == null ) {
 			throw new FeaturesCollectorException("Not all features were found.");
 		}
+		
 		if ( f instanceof IHasID) {
 			this.id = ((IHasID) f).getID();			
 		} else {
@@ -65,6 +74,10 @@ public class LireObject implements IFeaturesCollector, IHasID, Serializable {
 		cl = (LireColorLayout) f.getFeature(LireColorLayout.class);
 		sc = (LireScalableColor) f.getFeature(LireScalableColor.class);
 		eh = (LireEdgeHistogram) f.getFeature(LireEdgeHistogram.class);
+		dc = (CcDominantColor) f.getFeature(CcDominantColor.class);
+		if(hasDominantColor())
+			this.version = VERSION_WITH_DC; 
+		
 		if ( cl == null ||
 				 sc == null ||
 				 eh == null) {
@@ -78,21 +91,29 @@ public class LireObject implements IFeaturesCollector, IHasID, Serializable {
 	}
 
 	public LireObject(DataInput in) throws IOException {
-		byte version = in.readByte();
+		this.version = in.readByte();
 		id = IDClasses.readData(in);
 //		id = new IDString(in);
 		cl = new LireColorLayout(in);
 		sc = new LireScalableColor(in);
 		eh = new LireEdgeHistogram(in);
+		if(VERSION_WITH_DC == version)
+			dc = new CcDominantColor(in);
+		else 
+			dc = null;
 	}
 	
 	public LireObject(ByteBuffer in) throws IOException {
-		byte version = in.get();
+		this.version = in.get();
 		id = IDClasses.readData(in);
 //		id = new IDString(in);
 		cl = new LireColorLayout(in);
 		sc = new LireScalableColor(in);
 		eh = new LireEdgeHistogram(in);
+		if(VERSION_WITH_DC == version)
+			dc = new CcDominantColor(in);
+		else 
+			dc = null;
 	}
 	
 	
@@ -109,6 +130,7 @@ public class LireObject implements IFeaturesCollector, IHasID, Serializable {
 		if ( featureClass.equals(LireColorLayout.class)) return cl;
 		else if ( featureClass.equals(LireScalableColor.class)) return sc;
 		else if ( featureClass.equals(LireEdgeHistogram.class)) return eh;
+		else if ( featureClass.equals(CcDominantColor.class)) return dc;
 		return null;
 	}
 
@@ -120,6 +142,8 @@ public class LireObject implements IFeaturesCollector, IHasID, Serializable {
 		cl.writeData(out);
 		sc.writeData(out);		
 		eh.writeData(out);
+		if(hasDominantColor())
+			dc.writeData(out);
 	}
 
 	@Override
@@ -169,6 +193,8 @@ public class LireObject implements IFeaturesCollector, IHasID, Serializable {
 		list.add(cl);
 		list.add(eh);
 		list.add(sc);
+		if(hasDominantColor())
+			list.add(dc);
 		return list;
 	}
 
@@ -177,6 +203,7 @@ public class LireObject implements IFeaturesCollector, IHasID, Serializable {
 		if ( c.equals(LireColorLayout.class)) return true;
 		if ( c.equals(LireScalableColor.class)) return true;
 		if ( c.equals(LireEdgeHistogram.class)) return true;
+		if ( c.equals(CcDominantColor.class)) return true;
 		return false;
 	}
 
@@ -187,6 +214,11 @@ public class LireObject implements IFeaturesCollector, IHasID, Serializable {
 		if ( eh != null ) tempHash = 31 * tempHash + eh.hashCode() ;
 		return tempHash;
 	}
+
+	public boolean hasDominantColor() {
+		return dc != null;
+	}
+
 	
 
 }

@@ -144,6 +144,7 @@ public class MultipleKNNPQueueID<F>  {
 				System.out.println("Avg inter-dist before ordering (topK): " + Pivots.getTrMatrixAvg(intDist, k));
 				startTime = System.currentTimeMillis();
 			}
+			//TODO: reorder top N only? 
 			reorder( ordering.getOrder(intDist));
 			if ( !silent ) {
 				System.out.println("Avg inter-dist after ordering: " + Pivots.getTrMatrixAvg(intDist));	

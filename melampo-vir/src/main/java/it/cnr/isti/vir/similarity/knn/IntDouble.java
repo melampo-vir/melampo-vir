@@ -19,7 +19,7 @@ public class IntDouble implements Comparable {
 		dist = in.readDouble();
 	}
 	
-	public final void writeData(DataOutput output) throws IOException {
+	public void writeData(DataOutput output) throws IOException {
 		output.writeInt(id);
 		output.writeDouble(dist);
 	}
